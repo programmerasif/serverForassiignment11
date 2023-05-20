@@ -55,8 +55,6 @@ async function run() {
             const result = await AllCarsCollection.findOne(query)
             console.log(result);
             res.send(result)
-            
-            
         })
         app.patch('/allCars/:id', async(req,res) =>{
             const id = req.params.id;
@@ -72,8 +70,14 @@ async function run() {
             const result = await AllCarsCollection.updateOne(filter,updateDoc)
             res.send(result)
         })
+        app.delete('/allCars/:id', async(req,res) =>{
+            const id = req.params.id;
+            const quary = {_id :new ObjectId(id)};
+            const result = await AllCarsCollection.deleteOne(quary)
+            res.send(result)
+        })
 
-        
+
         app.get('/allCars', async(req,res) =>{
             
             let query = {}
