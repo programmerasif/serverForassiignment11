@@ -1,14 +1,14 @@
 const express = require('express');
 var cors = require('cors')
 require('dotenv').config()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 
 
 // midelwere
 app.use(cors());
-app.use(express())
+app.use(express.json())
 
 
 console.log(process.env.DB_pass);
@@ -32,15 +32,44 @@ async function run() {
         const sportsCarsCollection = client.db('sportsToy').collection('sports')
         const busCarsCollection = client.db('busToy').collection('cars')
         const privateCarsCollection = client.db('privateToy').collection('privateCar')
-
+       
         // All cars
-        app.get('/allCars', async (req, res) => {
+        app.get('/allCar', async (req, res) => {
             const cursor = AllCarsCollection.find()
             const result = await cursor.toArray()
             res.send(result)
 
         })
 
+        app.post('/allCars', async (req, res) => {
+            const newCar = req.body;
+            
+            const result = await AllCarsCollection.insertOne(newCar)
+            res.send(result)
+
+        })
+        app.get('/allCars/:id', async(req,res) =>{
+            const id = req.params.id
+            const query = { _id : new ObjectId(id)}
+            console.log(query);
+            const result = await AllCarsCollection.findOne(query)
+            console.log(result);
+            res.send(result)
+            
+            
+        })
+        // app.patch('/allCars/:id',(req,res) =>{
+        //     const update = req.body;
+        // })
+        app.get('/allCars', async(req,res) =>{
+            
+            let query = {}
+            if (req.query?.email) {
+                query = { email: req.query.email}
+            }
+            const result = await AllCarsCollection.find(query).toArray()
+            res.send(result)
+        })
 
         // sports cars
         app.get('/sportsCar', async (req, res) => {
