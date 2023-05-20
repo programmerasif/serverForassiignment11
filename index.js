@@ -58,9 +58,22 @@ async function run() {
             
             
         })
-        // app.patch('/allCars/:id',(req,res) =>{
-        //     const update = req.body;
-        // })
+        app.patch('/allCars/:id', async(req,res) =>{
+            const id = req.params.id;
+            const filter = {_id :new ObjectId(id)};
+            const updated = req.body;
+            const updateDoc = {
+                $set: {
+                    price:updated.price,
+                    availableQuantity:updated.Quantity,
+                    description:updated.description
+                }
+            }
+            const result = await AllCarsCollection.updateOne(filter,updateDoc)
+            res.send(result)
+        })
+
+        
         app.get('/allCars', async(req,res) =>{
             
             let query = {}
