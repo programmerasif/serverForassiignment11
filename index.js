@@ -29,9 +29,24 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
         const AllCarsCollection = client.db('allCars').collection('totalCar')
-        const sportsCarsCollection = client.db('sportsToy').collection('sports')
-        const busCarsCollection = client.db('busToy').collection('cars')
-        const privateCarsCollection = client.db('privateToy').collection('privateCar')
+        const forHomrCarsCollection = client.db('AllcarForHome').collection('home')
+        // const sportsCarsCollection = client.db('sportsToy').collection('sports')
+        // const busCarsCollection = client.db('busToy').collection('cars')
+        // const privateCarsCollection = client.db('privateToy').collection('privateCar')
+
+        // const indeing = {name: 1}
+        // const option = {name : toyName}
+        // const result  = await AllCarsCollection.createIndex(indeing,option)
+
+
+        // app.get("/toySearcing/:text", async (req,res) => {
+        //     const findtext = req.params.text
+
+        //     const result = await AllCarsCollection.find(
+        //         {name: { $regex:findtext ,$options :"i"}}
+        //     ).toArray()
+        //     res.send(result)
+        // })
        
         // All cars
         app.get('/allCar', async (req, res) => {
@@ -88,28 +103,28 @@ async function run() {
             res.send(result)
         })
 
-        // sports cars
-        app.get('/sportsCar', async (req, res) => {
-            const cursor = sportsCarsCollection.find()
-            const result = await cursor.toArray()
-            res.send(result)
-
+        // for home page 
+        
+        // private 
+        app.get('/private', async(req,res) =>{
+           const quary = {type:'private'}
+           const result = await forHomrCarsCollection.find(quary).toArray();
+           res.send(result)
+        }) 
+        // Bus 
+        app.get('/bus', async(req,res) =>{
+           const quary = {type:'Bus'}
+           const result = await forHomrCarsCollection.find(quary).toArray();
+           res.send(result)
+        })
+        // sports 
+        app.get('/sports', async(req,res) =>{
+           const quary = {type:'sports'}
+           const result = await forHomrCarsCollection.find(quary).toArray();
+           res.send(result)
         })
 
-        // bus car 
-        app.get('/busCar', async (req, res) => {
-            const cursor = busCarsCollection.find()
-            const result = await cursor.toArray()
-            console.log(result);
-            res.send(result)
-        })
-        // private cars 
-        app.get('/privateCar', async (req, res) => {
-            const cursor = privateCarsCollection.find()
-            const result = await cursor.toArray()
-            console.log(result);
-            res.send(result)
-        })
+        
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
