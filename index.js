@@ -30,24 +30,25 @@ async function run() {
         // await client.connect();
         const AllCarsCollection = client.db('allCars').collection('totalCar')
         const forHomrCarsCollection = client.db('AllcarForHome').collection('home')
-        // const sportsCarsCollection = client.db('sportsToy').collection('sports')
-        // const busCarsCollection = client.db('busToy').collection('cars')
-        // const privateCarsCollection = client.db('privateToy').collection('privateCar')
+        const topRaitedCollection = client.db('toSelling').collection('top')
+    
 
-        // const indeing = {name: 1}
-        // const option = {name : toyName}
-        // const result  = await AllCarsCollection.createIndex(indeing,option)
-
-
-        // app.get("/toySearcing/:text", async (req,res) => {
-        //     const findtext = req.params.text
-
-        //     const result = await AllCarsCollection.find(
-        //         {name: { $regex:findtext ,$options :"i"}}
-        //     ).toArray()
-        //     res.send(result)
-        // })
+        const indeing = {name: 1}
+        const option = {string: "text"}
+        const result  = await AllCarsCollection.createIndex(indeing,option)
+        app.get("/toySearcing/:text", async (req, res) => {
+            const searchText = req.params.text;
+    
+            const result = await AllCarsCollection.find({
+                  $or: [{ name: { $regex: searchText, $options: "i"}}]
+            })
+            .toArray();
+    
+            res.send(result)
+        })
        
+
+
         // All cars
         app.get('/allCar', async (req, res) => {
             const cursor = AllCarsCollection.find()
@@ -66,7 +67,6 @@ async function run() {
         app.get('/allCars/:id', async(req,res) =>{
             const id = req.params.id
             const query = { _id : new ObjectId(id)}
-            console.log(query);
             const result = await AllCarsCollection.findOne(query)
             console.log(result);
             res.send(result)
@@ -124,7 +124,23 @@ async function run() {
            res.send(result)
         })
 
-        
+        // view detils for home car 
+
+        app.get('/allcarForhome/:id', async(req,res) =>{
+            const id = req.params.id
+            const query = { _id : new ObjectId(id)}
+            const result = await forHomrCarsCollection.findOne(query)
+            console.log(result);
+            res.send(result)
+        })
+
+        // toprated product 
+
+        app.get('/topRated', async (req, res) => {
+            const result = await topRaitedCollection.find().toArray()
+            res.send(result)
+        })
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
