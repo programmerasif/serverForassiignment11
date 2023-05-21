@@ -33,9 +33,9 @@ async function run() {
         const topRaitedCollection = client.db('toSelling').collection('top')
     
 
-        const indeing = {name: 1}
-        const option = {string: "text"}
-        const result  = await AllCarsCollection.createIndex(indeing,option)
+        // const indeing = {name: 1}
+        // const option = {string: "text"}
+        // const result  = await AllCarsCollection.createIndex(indeing,option)
         app.get("/toySearcing/:text", async (req, res) => {
             const searchText = req.params.text;
     
@@ -142,7 +142,7 @@ async function run() {
         })
 
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
+        // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
