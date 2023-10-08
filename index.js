@@ -135,6 +135,12 @@ async function run() {
             res.send(result)
         })
 
+        // toprated product 
+
+        app.get('/topRated', async (req, res) => {
+            const result = await topRaitedCollection.find().toArray()
+            res.send(result)
+        })
 
 
 
@@ -150,12 +156,32 @@ async function run() {
             }
           });
 
-        // toprated product 
-
-        app.get('/topRated', async (req, res) => {
-            const result = await topRaitedCollection.find().toArray()
+          app.patch('/updateUser/:id', async(req,res) =>{
+            const id = req.params.id;
+            console.log(id);
+            const filter = {_id :new ObjectId(id)};
+            const updated = req.body;
+            console.log(updated);
+            const updateDoc = {
+                $set: {
+                    name:updated.name,
+                    email:updated.email,
+                    image:updated.url
+                }
+            }
+            const result = await database.updateOne(filter,updateDoc)
             res.send(result)
         })
+
+        app.post('/newUser', async (req, res) => {
+            const person = req.body;
+            
+            const result = await database.insertOne(person)
+            res.send(result)
+
+        })
+
+        
 
         // Send a ping to confirm a successful connection
         // await client.db("admin").command({ ping: 1 });
