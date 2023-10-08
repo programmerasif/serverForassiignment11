@@ -31,6 +31,7 @@ async function run() {
         const AllCarsCollection = client.db('allCars').collection('totalCar')
         const forHomrCarsCollection = client.db('AllcarForHome').collection('home')
         const topRaitedCollection = client.db('toSelling').collection('top')
+        const database = client.db("UserProfile").collection("users");
     
 
         // const indeing = {name: 1}
@@ -133,6 +134,21 @@ async function run() {
             console.log(result);
             res.send(result)
         })
+
+
+
+
+        // for all user 
+
+        app.get('/users', async (req, res) => {
+            try {
+              const result = await database.find().toArray();
+              res.send(result);
+            } catch (error) {
+              console.error("Error fetching users:", error);
+              res.status(500).json({ error: "Internal Server Error" });
+            }
+          });
 
         // toprated product 
 
